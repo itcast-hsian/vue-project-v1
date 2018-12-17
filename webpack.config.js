@@ -36,7 +36,7 @@ module.exports = {
         loader: 'style-loader!css-loader!sass-loader' //webpack底层调用这些包的顺序是从右到左
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        test: /\.(png|jpg|gif|svg|woff|ttf)$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]'

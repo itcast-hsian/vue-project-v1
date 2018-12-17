@@ -1,24 +1,27 @@
 <template>
   <div id="app">
-    index
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
   name: 'app',
-  components: {
-
+  data(){
+    return {
+    }
   }
 }
 </script>
 
-<style lang="scss">
+<style>
 *{
   margin:0;
   padding:0;
 } 
-body{
-	color:blue;
+
+a{
+  text-decoration: none;
+  color:#333;
 }
 </style>

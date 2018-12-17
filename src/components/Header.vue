@@ -1,0 +1,40 @@
+<template>
+    <div class="header">
+        <div class="toggle-btn" @click="handleToggle">
+            <i class="el-icon-arrow-right"></i>
+        </div>
+
+        <div class="profile">
+            <i class="el-icon-picture"></i>
+            <span>baidu@gmail.com</span>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    methods: {
+        handleToggle(){
+            this.$emit("toggle")
+        }
+    }
+}
+</script>
+
+<style scoped lang="scss">
+    .header{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .toggle-btn{
+        display: inline-block;
+        height:100%;
+        background:#a5b4c6;
+        padding:0 20px;
+        cursor:pointer;
+    }
+    .profile{
+        padding:0 20px;
+    }
+</style>
