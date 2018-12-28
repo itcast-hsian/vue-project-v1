@@ -40,7 +40,7 @@
 								title: "栏目管理"
 							},
 							{
-								path: "/comments",
+								path: "/comment-list",
 								title: "评论管理"
 							}
 						]
@@ -58,7 +58,7 @@
 								title: "所有会员"
 							},
 							{
-								path: "/comments",
+								path: "/comment",
 								title: "会员组别"
 							}
 						]
