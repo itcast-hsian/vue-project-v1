@@ -81,12 +81,13 @@
                     <el-upload
                     action="http://127.0.0.1:8899/admin/article/uploadimg"
                     list-type="picture-card"
+                    :file-list="form.fileList"
                     multiple
                     :on-preview="handlePictureCardPreview"
                     :on-remove="handleRemove"
                     :on-success="handleMultSuccess"
                     :limit="5">
-                    <i class="el-icon-plus" v-show="form.fileList.length < 5"></i>
+                    <i class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog :visible.sync="dialogVisible">
                         <img width="100%" :src="dialogImageUrl" alt="">
@@ -118,12 +119,10 @@ import 'quill/dist/quill.bubble.css'
 
 import { quillEditor } from 'vue-quill-editor'
 
-const axios = require('axios');
-axios.defaults.baseURL = "http://127.0.0.1:8899"
-
 export default {
     data() {
       return {
+        id: 0,
         category_goods: [],
         form: {
           title: '',
@@ -151,8 +150,9 @@ export default {
     },
     methods: {
       onSubmit() {
-        axios({
-            url: "/admin/goods/add/goods",
+        this.$axios({
+            //url: "/admin/goods/add/goods",
+            url: `admin/goods/edit/${this.id}`,
             method: "POST",
             data: this.form,
             withCredentials: true
@@ -169,9 +169,7 @@ export default {
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
-        this.form.imgList.push({
-            ...res
-        }) 
+        this.form.imgList = [res];
       },
       beforeAvatarUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2;
@@ -199,9 +197,28 @@ export default {
     },
 
     mounted(){
+        const id = this.$route.params.id;
+        this.id = id;
+        this.$axios({
+            url: `/admin/goods/getgoodsmodel/${id}`,
+        }).then(res => {
+            const {message} = res.data;
+            this.form = {
+                ...this.form,
+                ...message,
+                fileList: message.fileList.map(v => {
+                    return {
+                        ...v,
+                        url: "http://127.0.0.1:8899" + v.shorturl
+                    }
+                })
+            };
+
+            this.imageUrl =  message.imgList[0].url;
+        })
 
         // 获取分类数据
-        axios({
+        this.$axios({
             url: "/admin/category/getlist/goods",
         }).then(res => {
             const {message} = res.data;

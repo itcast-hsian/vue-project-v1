@@ -2,21 +2,21 @@
 	<div>
 		<div class="form-control">
 			<div>
-				<el-button @click="toggleSelection()">全选</el-button>
+				<!-- <el-button @click="toggleSelection()">全选</el-button> -->
 				<router-link to="goods-add"><el-button>新增</el-button></router-link>
-				<el-button @click="">删除</el-button>
+				<el-button @click="handleDelete(selectedRows)">删除</el-button>
 			</div>
 
 			<div >
-				<el-input placeholder="请输入内容" v-model="inputValue" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search"></el-button>
+				<el-input placeholder="请输入内容" v-model="searchvalue" class="input-with-select">
+					<el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
 				</el-input>
 			</div>
 		</div>
 
 		<el-table
 			ref="multipleTable"
-			:data="tableData3"
+			:data="tableData"
 			tooltip-effect="dark"
 			style="width: 100%"
 			@selection-change="handleSelectionChange">
@@ -31,7 +31,7 @@
 					<router-link to="/">
 						<div class="goods-info">
 							<div class="goods-img">
-								<img :src="scope.row.image"/>
+								<img :src="scope.row.imgurl"/>
 							</div>
 							<p>{{scope.row.title}}</p>
 						</div>
@@ -39,24 +39,24 @@
 				</template>
 			</el-table-column>
 			<el-table-column
-			prop="name"
-			label="姓名"
+			prop="categoryname"
+			label="类型"
 			width="120">
 			</el-table-column>
 			<el-table-column
-			prop="address"
-			label="地址"
+			prop="market_price"
+			label="价格"
 			show-overflow-tooltip>
 			</el-table-column>
 			<el-table-column label="操作" align="right">
 				<template slot-scope="scope">
 					<el-button
 					size="mini"
-					@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					@click="handleEdit(scope.row)">编辑</el-button>
 					<el-button
 					size="mini"
 					type="danger"
-					@click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					@click="handleDelete([scope.row])">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -65,53 +65,96 @@
 			<el-pagination
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
-			:current-page="currentPage4"
-			:page-sizes="[100, 200, 300, 400]"
-			:page-size="100"
+			:current-page="pageIndex"
+			:page-sizes="[5, 10, 15, 20]"
+			:page-size="pageSize"
 			layout="total, sizes, prev, pager, next, jumper"
-			:total="400">
+			:total="totalCount">
 			</el-pagination>
 		</div>
 	</div>
 </template>
 <script>
+
+
 	export default {
 		data(){
 			return{
-				tableData3: [
-					{
-						title: '卡宾男鞋冬季高帮板鞋男保暖加绒棉鞋男白色运动休闲鞋潮流鞋子',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1518 弄',
-						image: "https://img.alicdn.com/simba/img/TB1CvxdwkvoK1RjSZFNSuwxMVXa.jpg"
-					}, {
-						title: '卡宾男鞋冬季高帮板鞋男保暖加绒棉鞋男白色运动休闲鞋潮流鞋子',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1518 弄',
-						image: "https://img.alicdn.com/simba/img/TB1CvxdwkvoK1RjSZFNSuwxMVXa.jpg"
-					}, {
-						title: '卡宾男鞋冬季高帮板鞋男保暖加绒棉鞋男白色运动休闲鞋潮流鞋子',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1518 弄',
-						image: "https://img.alicdn.com/simba/img/TB1CvxdwkvoK1RjSZFNSuwxMVXa.jpg"
-					},
-				],
-				currentPage4: 4,
-				inputValue: ""
+				tableData: [],
+				selectedRows: [],
+
+				pageIndex: 1,
+				pageSize: 5,
+				searchvalue: "",
+				totalCount: 0
 			}
 		},
 
 		methods: {
 			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
+				this.pageSize = val;
+				this.getList();
 			},
 			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
+				this.pageIndex = val;
+				this.getList();
+			},
+			handleEdit(val){
+				this.$router.push({name: "goods-edit", params: {id: val.id}})
 			},
 			handleSelectionChange(val) {
-				console.log(`当前页: ${val}`);
+				this.selectedRows = val;
+			},
+			getList(){
+				// 获取列表数据
+				this.$axios({
+					method:"GET",
+					url: `/admin/goods/getlist`,
+					params: {
+						pageIndex: this.pageIndex,
+						pageSize: this.pageSize,
+						searchvalue: this.searchvalue
+					}
+				}).then(res => {
+					const {message, pageIndex, pageSize, totalcount} = res.data;
+					this.tableData = message;
+					this.pageIndex = pageIndex,
+					this.pageSize = pageSize;
+					this.totalCount = totalcount;
+				})
+			},
+
+			handleDelete(list = []){
+				if(list.length === 0){
+					return;
+				}
+				
+				const arr = list.map(v => {
+					return v.id
+				})
+				this.$axios({
+					method:"GET",
+					url: `/admin/goods/del/${arr.join(",")}`,
+				}).then(res => {
+					const {message} = res.data;
+					this.$message({
+			          message,
+			          type: 'success'
+			        });
+
+			        this.getList();
+				})
+			},
+
+			handleSearch(){
+				this.pageIndex = 1;
+				this.getList();
 			}
 		},
+
+		mounted(){
+			this.getList();
+		}
 	}
 </script>
 <style scoped lang="scss">

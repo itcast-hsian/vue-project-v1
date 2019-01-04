@@ -3,6 +3,7 @@ import Admin from "./pages/Admin.vue";
 import Login from "./pages/Login.vue";
 import GoodsList from "./pages/goods/GoodsList.vue";
 import GoodsAdd from "./pages/goods/GoodsAdd.vue";
+import GoodsEdit from "./pages/goods/GoodsEdit.vue";
 import CategoryList from "./pages/category/CategoryList.vue";
 import CategoryAdd from "./pages/category/CategoryAdd.vue";
 import CommentList from "./pages/comment/CommentList.vue";
@@ -34,6 +35,12 @@ const routes = [
         component: GoodsAdd,
         name: "goods-add",
         meta: "添加商品",
+      },
+      {
+        path: "goods-edit/:id",
+        component: GoodsEdit,
+        name: "goods-edit",
+        meta: "编辑商品",
       },
       {
         path: "category-list",

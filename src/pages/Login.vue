@@ -5,15 +5,15 @@
                 <div class="login-title">登录</div>
             </el-form-item>
             <el-form-item label="账号">
-                <el-input v-model="formLabelAlign.name"></el-input>
+                <el-input v-model="formLabelAlign.uname"></el-input>
             </el-form-item>
             <el-form-item label="密码">
-                <el-input v-model="formLabelAlign.region"></el-input>
+                <el-input type="password" v-model="formLabelAlign.upwd"></el-input>
             </el-form-item>
             <el-form-item>
                 <div class="login-title">
-                    <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-                    <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                    <el-button type="primary" @click="submitForm">提交</el-button>
+                    <el-button @click="resetForm">重置</el-button>
                 </div>
             </el-form-item>
         </el-form>
@@ -21,15 +21,34 @@
 </template>
 
 <script>
+const axios = require('axios');
+axios.defaults.baseURL = "http://127.0.0.1:8899"
+
 export default {
     data() {
       return {
         formLabelAlign: {
-          name: '',
-          region: '',
-          type: ''
+          uname: '',
+          upwd: ''
         }
       };
+    },
+
+    methods: {
+        submitForm(){
+            axios({
+                url:"/admin/account/login",
+                method: "POST",
+                data: this.formLabelAlign,
+                withCredentials: true,
+            }).then(res => {
+                console.log(res)
+            })
+        },
+
+        resetForm(){
+
+        }
     }
 }
 </script>
