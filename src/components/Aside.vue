@@ -33,16 +33,16 @@
 						group: [
 							{
 								path: "/goods-list",
-								title: "内容管理"
+								title: "商品管理"
 							},
 							{
 								path: "/category-list",
 								title: "栏目管理"
 							},
-							{
-								path: "/comment-list",
-								title: "评论管理"
-							}
+							// {
+							// 	path: "/comment-list",
+							// 	title: "评论管理"
+							// }
 						]
 					},
 					{
@@ -50,16 +50,18 @@
 						path: "/admin",
 						group: [
 							{
-								path: "/goods-list",
-								title: "审核会员"
-							},
+								path: "/account-list",
+								title: "会员列表"
+							}
+						]
+					},
+					{
+						title: "商城订单",
+						path: "/admin",
+						group: [
 							{
-								path: "/category-list",
-								title: "所有会员"
-							},
-							{
-								path: "/comment",
-								title: "会员组别"
+								path: "/order-list",
+								title: "订单管理"
 							}
 						]
 					}

@@ -6,7 +6,11 @@ import GoodsAdd from "./pages/goods/GoodsAdd.vue";
 import GoodsEdit from "./pages/goods/GoodsEdit.vue";
 import CategoryList from "./pages/category/CategoryList.vue";
 import CategoryAdd from "./pages/category/CategoryAdd.vue";
+import AccountList from "./pages/account/AccountList.vue";
 import CommentList from "./pages/comment/CommentList.vue";
+import OrderList from "./pages/order/OrderList.vue";
+import OrderEdit from "./pages/order/OrderEdit.vue";
+import OrderDetail from "./pages/order/OrderDetail.vue";
 
 const routes = [
   {
@@ -43,6 +47,12 @@ const routes = [
         meta: "编辑商品",
       },
       {
+        path: "account-list",
+        component: AccountList,
+        name: "account-list",
+        meta: "会员列表",
+      },
+      {
         path: "category-list",
         component: CategoryList,
         name: "category-list",
@@ -59,6 +69,24 @@ const routes = [
         component: CommentList,
         name: "comment-list",
         meta: "评论管理",
+      },
+      {
+        path: "order-list",
+        component: OrderList,
+        name: "order-list",
+        meta: "订单管理",
+      },
+      {
+        path: "order-edit/:id",
+        component: OrderEdit,
+        name: "order-edit",
+        meta: "编辑订单",
+      },
+      {
+        path: "order-detail/:id",
+        component: OrderDetail,
+        name: "order-detail",
+        meta: "订单详情",
       }
     ]
   }

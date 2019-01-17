@@ -3,15 +3,27 @@
 		<div class="form-control">
 			<div>
 				<!-- <el-button @click="toggleSelection()">全选</el-button> -->
-				<router-link to="goods-add"><el-button>新增</el-button></router-link>
-				<el-button @click="handleDelete(selectedRows)">删除</el-button>
+				<!-- <router-link to="order-add"><el-button>新增</el-button></router-link> -->
+				<!-- <el-button @click="handleDelete(selectedRows)">删除订单</el-button> -->
 			</div>
 
-			<div >
-				<el-input placeholder="请输入内容" v-model="searchvalue" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
-				</el-input>
-			</div>
+			<el-row style="width:100%;" type="flex" justify="end">
+				<el-col :span="6">
+					<el-select v-model="statusValue" placeholder="请选择" @change="hanleStatusChange">
+						<el-option
+						v-for="item in options"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="6">
+					<el-input placeholder="会员名称" v-model="searchvalue" class="input-with-select">
+						<el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+					</el-input>
+				</el-col>
+			</el-row>
 		</div>
 
 		<el-table
@@ -21,41 +33,41 @@
 			style="width: 100%"
 			@selection-change="handleSelectionChange">
 			<el-table-column
-			type="selection"
-			width="55">
+			type="selection">
 			</el-table-column>
 			<el-table-column
-			label="标题">
-				<template slot-scope="scope">
-					<router-link to="/">
-						<div class="goods-info">
-							<div class="goods-img">
-								<img :src="scope.row.imgurl"/>
-							</div>
-							<p>{{scope.row.title}}</p>
-						</div>
-					</router-link>
-				</template>
+			prop="id"
+			label="订单id">
 			</el-table-column>
 			<el-table-column
-			prop="categoryname"
-			label="类型"
-			width="120">
+			prop="user_name"
+			label="会员名称">
 			</el-table-column>
 			<el-table-column
-			prop="market_price"
-			label="价格"
-			show-overflow-tooltip>
+			prop="area"
+			label="地址"
+			minWidth="250">
 			</el-table-column>
-			<el-table-column label="操作" align="right">
+			<el-table-column
+			prop="expressTitle"
+			label="快递">
+			</el-table-column>
+			<el-table-column
+			prop="statusName"
+			label="状态">
+			</el-table-column>
+			<el-table-column label="操作" align="right" minWidth="150">
 				<template slot-scope="scope">
 					<el-button
 					size="mini"
 					@click="handleEdit(scope.row)">编辑</el-button>
-					<el-button
-					size="mini"
-					type="danger"
-					@click="handleDelete([scope.row])">删除</el-button>
+					<router-link :to="`order-detail/${scope.row.id}`">
+						<el-button
+						size="mini"
+						type="danger">
+						查看
+						</el-button>
+					</router-link>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -85,7 +97,30 @@
 				pageIndex: 1,
 				pageSize: 5,
 				searchvalue: "",
-				totalCount: 0
+				orderstatus: 0,
+				totalCount: 0,
+
+				options:  [{
+					value: 0,
+					label: '全部'
+				},
+				{
+					value: 1,
+					label: '待付款'
+				}, {
+					value: 2,
+					label: '已付款'
+				}, {
+					value: 3,
+					label: '已发货'
+				}, {
+					value: 4,
+					label: '已签收'
+				}, {
+					value: 5,
+					label: '取消'
+				}],
+				statusValue: ""
 			}
 		},
 
@@ -99,7 +134,7 @@
 				this.getList();
 			},
 			handleEdit(val){
-				this.$router.push({name: "goods-edit", params: {id: val.id}})
+				this.$router.push({name: "order-edit", params: {id: val.id}})
 			},
 			handleSelectionChange(val) {
 				this.selectedRows = val;
@@ -108,11 +143,12 @@
 				// 获取列表数据
 				this.$axios({
 					method:"GET",
-					url: `/admin/goods/getlist`,
+					url: `/admin/order/getorderlist`,
 					params: {
 						pageIndex: this.pageIndex,
 						pageSize: this.pageSize,
-						searchvalue: this.searchvalue
+						vipname: this.searchvalue,
+						orderstatus: this.orderstatus
 					}
 				}).then(res => {
 					const {message, pageIndex, pageSize, totalcount} = res.data;
@@ -122,31 +158,12 @@
 					this.totalCount = totalcount;
 				})
 			},
-
-			handleDelete(list = []){
-				if(list.length === 0){
-					return;
-				}
-				
-				const arr = list.map(v => {
-					return v.id
-				})
-				this.$axios({
-					method:"GET",
-					url: `/admin/goods/del/${arr.join(",")}`,
-				}).then(res => {
-					const {message} = res.data;
-					this.$message({
-			          message,
-			          type: 'success'
-			        });
-
-			        this.getList();
-				})
-			},
-
 			handleSearch(){
 				this.pageIndex = 1;
+				this.getList();
+			},
+			hanleStatusChange(val){
+				this.orderstatus = val;
 				this.getList();
 			}
 		},

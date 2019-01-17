@@ -33,14 +33,14 @@
 							type="text"
 							size="mini"
 							@click="() => handleEdit(data)">
-							Edit
+							编辑
 						</el-button>
-						<el-button
+						<!-- <el-button
 							type="text"
 							size="mini"
 							@click="() => handleRemove(node, data)">
-							Delete
-						</el-button>
+							删除
+						</el-button> -->
 					</span>
 				</span>
 			</el-tree>
@@ -64,31 +64,41 @@
 	            url: "/admin/category/getlist/goods",
 	        }).then(res => {
 	            const {message} = res.data;
-	            let data = [];
+				let arr = [];
 
-	            message.forEach(v => {
-	            	if(v.parent_id === 0){
+				function loop(arr,item){
+					arr.forEach(v => {
+						if(v.category_id == item.parent_id){
+							if(!v.children){
+								v.children = [];
+							}
+							v.children.push({
+								...item,
+								id: item.category_id,
+			 					label: item.title
+							});
+							return;
+						}
 
-	            		let children = message.filter(item => {
-            				return item.parent_id === v.category_id;
-            			})
+						if(v.children){
+							loop(v.children, item);
+						}
+					})
+				}
 
-	            		data.push({
-	            			...v,
-	            			id: v.category_id,
-	            			label: v.title,
-	            			children: children.map(item => {
-	            				return {
-	            					...item,
-	            					id: item.category_id,
-	            					label: item.title
-	            				}
-	            			})
-	            		})
-	            	}
-	            })
+				message.forEach(v => {
+					if(v.parent_id === 0){
+						arr.push({
+							...v,
+							id: v.category_id,
+							label: v.title
+						})
+					}else{
+						loop(arr, v);
+					}
+				})
 
-	            this.data = data;
+	            this.data = arr;
 	        })
 		},
 
