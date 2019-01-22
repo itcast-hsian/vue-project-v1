@@ -59,10 +59,12 @@ export default {
 
 <style scoped lang="scss">
 .el-header, .el-footer {
-    background-color: #B3C0D1;
     color: #333;
-    line-height: 60px;
     padding:0;
+    line-height:60px;
+    background:#fff;
+    box-shadow:1px 1px 3px #d5dde4;
+    position:relative;
   }
 
   .el-footer {

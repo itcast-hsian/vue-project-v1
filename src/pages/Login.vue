@@ -36,13 +36,14 @@ export default {
 
     methods: {
         submitForm(){
+            const returnUrl= this.$route.query.returnUrl || "/";
             axios({
                 url:"/admin/account/login",
                 method: "POST",
                 data: this.formLabelAlign,
                 withCredentials: true,
             }).then(res => {
-                console.log(res)
+                this.$router.push(returnUrl)
             })
         },
 

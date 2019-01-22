@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="toggle-btn" @click="handleToggle">
-            <i class="el-icon-arrow-right"></i>
+            <i class="el-icon-back"></i>
         </div>
 
         <div class="profile">
@@ -30,7 +30,6 @@ export default {
     .toggle-btn{
         display: inline-block;
         height:100%;
-        background:#a5b4c6;
         padding:0 20px;
         cursor:pointer;
     }
