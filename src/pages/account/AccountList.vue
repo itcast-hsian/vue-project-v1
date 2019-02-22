@@ -3,13 +3,13 @@
 		<el-row class="form-control" type="flex" justify="space-between">
 			<el-col>
 				<!-- <el-button @click="toggleSelection()">全选</el-button> -->
-				<router-link to="order-add"><el-button>新增</el-button></router-link>
-				<el-button @click="handleDelete(selectedRows)">删除</el-button>
+				<!-- <router-link to="order-add"><el-button>新增</el-button></router-link>
+				<el-button @click="handleDelete(selectedRows)">删除</el-button> -->
 			</el-col>
 
             <el-col>
                 <el-row type="flex" justify="end">
-                    <el-col :span="8">
+                    <!-- <el-col :span="8">
                         <el-select v-model="statusValue" placeholder="请选择" @change="hanleStatusChange">
                             <el-option
                             v-for="item in options"
@@ -18,7 +18,7 @@
                             :value="item.value">
                             </el-option>
                         </el-select>
-                    </el-col>
+                    </el-col> -->
                     <el-col :span="8">
                         <el-input placeholder="会员名称" v-model="searchvalue" class="input-with-select">
                             <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
@@ -38,21 +38,17 @@
 			type="selection">
 			</el-table-column>
 			<el-table-column
-			prop="username"
+			prop="user_name"
 			label="姓名">
 			</el-table-column>
-			<el-table-column
+			<!-- <el-table-column
 			label="性别">
                 <template slot-scope="scope">
-                    <span>{{scope.row.gender == 1 ? '男': '女'}}</span>
+                    <span>{{scope.row.sex == 1 ? '男': '女'}}</span>
                 </template>
-			</el-table-column>
+			</el-table-column> -->
 			<el-table-column
-			prop="age"
-			label="年龄">
-			</el-table-column>
-			<el-table-column
-			prop="phone_numer"
+			prop="mobile"
 			label="手机号码">
 			</el-table-column>
 			<el-table-column
@@ -60,18 +56,14 @@
 			label="邮箱">
 			</el-table-column>
 			<el-table-column
-			prop="time"
+			prop="reg_time"
 			label="时间">
 			</el-table-column>
             <el-table-column label="操作" align="right">
 				<template slot-scope="scope">
 					<el-button
 					size="mini"
-					@click="handleEdit(scope.row)">编辑</el-button>
-					<el-button
-					size="mini"
-					type="danger"
-					@click="handleDelete([scope.row])">删除</el-button>
+					@click="handleEdit(scope.row)">查看</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -141,25 +133,22 @@
 				this.selectedRows = val;
 			},
 			getList(){
-				// 获取列表数据
-				// this.$axios({
-				// 	method:"GET",
-				// 	url: `/admin/order/getorderlist`,
-				// 	params: {
-				// 		pageIndex: this.pageIndex,
-				// 		pageSize: this.pageSize,
-				// 		vipname: this.searchvalue,
-				// 		orderstatus: this.orderstatus
-				// 	}
-				// }).then(res => {
-				// 	const {message, pageIndex, pageSize, totalcount} = res.data;
-				// 	this.tableData = message;
-				// 	this.pageIndex = pageIndex,
-				// 	this.pageSize = pageSize;
-				// 	this.totalCount = totalcount;
-                // })
-                
-
+				//获取列表数据
+				this.$axios({
+					method:"GET",
+					url: `/admin/account/getlist`,
+					params: {
+						pageIndex: this.pageIndex,
+						pageSize: this.pageSize,
+						searchvalue: this.searchvalue,
+					}
+				}).then(res => {
+					const {message, pageIndex, pageSize, totalcount} = res.data;
+					this.tableData = message;
+					this.pageIndex = pageIndex,
+					this.pageSize = pageSize;
+					this.totalCount = totalcount;
+                })
 			},
 			handleSearch(){
 				this.pageIndex = 1;

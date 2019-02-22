@@ -6,7 +6,7 @@
 
         <div class="profile">
             <i class="el-icon-picture"></i>
-            <span>baidu@gmail.com</span>
+            <span>admin</span>
         </div>
     </div>
 </template>
