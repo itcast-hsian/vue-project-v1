@@ -21,8 +21,8 @@
 </template>
 
 <script>
-const axios = require('axios');
-axios.defaults.baseURL = "http://127.0.0.1:8899"
+
+import { mapActions } from 'vuex'
 
 export default {
     data() {
@@ -36,14 +36,8 @@ export default {
 
     methods: {
         submitForm(){
-            const returnUrl= this.$route.query.returnUrl || "/";
-            axios({
-                url:"/admin/account/login",
-                method: "POST",
-                data: this.formLabelAlign,
-                withCredentials: true,
-            }).then(res => {
-                this.$router.push(returnUrl)
+            this.$store.dispatch("user/login", this.formLabelAlign).then(res => {
+                this.$router.back();
             })
         },
 
