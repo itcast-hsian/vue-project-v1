@@ -140,7 +140,7 @@ export default {
           zhaiyao: "",
           content: "",
           imgList: [],
-          fileList: []
+          fileList: [],
         },
 
         imageUrl: '',
