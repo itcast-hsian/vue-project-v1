@@ -75,13 +75,13 @@
 </template>
 <script>
 
+	import { mapState, mapActions, mapMutations } from 'vuex'
 
 	export default {
 		data(){
 			return{
-				tableData: [],
+				//tableData: [],
 				selectedRows: [],
-
 				pageIndex: 1,
 				pageSize: 5,
 				searchvalue: "",
@@ -89,7 +89,14 @@
 			}
 		},
 
+		computed: {
+			...mapState({
+				tableData: state => state.goods.goodsList, 
+			})
+		},
+
 		methods: {
+
 			handleSizeChange(val) {
 				this.pageSize = val;
 				this.getList();
@@ -106,20 +113,31 @@
 			},
 			getList(){
 				// 获取列表数据
-				this.$axios({
-					method:"GET",
-					url: `/admin/goods/getlist`,
-					params: {
-						pageIndex: this.pageIndex,
-						pageSize: this.pageSize,
-						searchvalue: this.searchvalue
-					}
+				// this.$axios({
+				// 	method:"GET",
+				// 	url: `/admin/goods/getlist`,
+				// 	params: {
+				// 		pageIndex: this.pageIndex,
+				// 		pageSize: this.pageSize,
+				// 		searchvalue: this.searchvalue
+				// 	}
+				// }).then(res => {
+				// 	const {message, pageIndex, pageSize, totalcount} = res.data;
+				// 	this.tableData = message;
+				// 	this.pageIndex = pageIndex,
+				// 	this.pageSize = pageSize;
+				// 	this.totalCount = totalcount;
+				// })
+
+			
+				this.$store.dispatch("goods/getGoods",{
+					pageIndex: this.pageIndex,
+					pageSize: this.pageSize,
+					searchvalue: this.searchvalue
 				}).then(res => {
-					const {message, pageIndex, pageSize, totalcount} = res.data;
-					this.tableData = message;
-					this.pageIndex = pageIndex,
-					this.pageSize = pageSize;
-					this.totalCount = totalcount;
+					this.pageIndex = res.pageIndex,
+					this.pageSize = res.pageSize;
+					this.totalCount = res.totalcount;
 				})
 			},
 
