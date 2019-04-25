@@ -23,6 +23,10 @@ export default {
   padding:0;
 } 
 
+html,body{
+  height:100%;
+}
+
 a{
   text-decoration: none;
   color:#333;

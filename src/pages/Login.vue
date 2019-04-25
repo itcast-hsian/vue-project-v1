@@ -35,7 +35,6 @@ export default {
     methods: {
         submitForm(){
             this.$store.dispatch("user/login", this.formLabelAlign).then(res => {
-                console.log(res)
                 this.$router.push(this.$route.query.returnUrl || "/");
             })
         },
