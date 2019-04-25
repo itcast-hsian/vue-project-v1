@@ -12,18 +12,7 @@ export default {
     }
   },
   mounted(){
-    this.$axios({
-      url: "/admin/account/islogin",
-      withCredentials: true
-    }).then((res) => {
-      
-      if(res.data.code == "nologin" || localStorage.getItem("username")){
-        const path = this.$route.path;
-        if(path.indexOf("/login") > -1) return;
-
-        this.$router.push({path: `/login?returnUrl=${path}`})
-      }
-    })
+   
   }
 }
 </script>

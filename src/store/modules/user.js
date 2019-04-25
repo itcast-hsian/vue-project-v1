@@ -25,7 +25,7 @@ export default {
     actions: {
 
         login({commit, state}, data){
-            new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 axios({
                     method: "POST",
                     url:"/admin/account/login",
@@ -43,7 +43,7 @@ export default {
         },
 
         logout({commit}){
-            new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 axios({
                     method: "get",
                     url:"/admin/account/logout",

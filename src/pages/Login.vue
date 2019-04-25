@@ -22,8 +22,6 @@
 
 <script>
 
-import { mapActions } from 'vuex'
-
 export default {
     data() {
       return {
@@ -37,7 +35,8 @@ export default {
     methods: {
         submitForm(){
             this.$store.dispatch("user/login", this.formLabelAlign).then(res => {
-                this.$router.back();
+                console.log(res)
+                this.$router.push(this.$route.query.returnUrl || "/");
             })
         },
 
